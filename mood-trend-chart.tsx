@@ -38,7 +38,7 @@ export default function MoodTrendChart({ sessions, days = 7 }: MoodTrendChartPro
     // Calculate averages for each day
     return Object.entries(moodsByDay).map(([date, moods]) => ({
       date,
-      avgMood: moods.reduce((sum, mood) => sum + mood, 0) / moods.length,
+      avgMood: moods.length > 0 ? moods.reduce((sum, mood) => sum + mood, 0) / moods.length : 0,
       sessionCount: moods.length
     }));
   };
@@ -75,7 +75,7 @@ export default function MoodTrendChart({ sessions, days = 7 }: MoodTrendChartPro
   const trend = getMoodTrend();
   const maxMood = Math.max(...moodData.map(d => d.avgMood));
   const minMood = Math.min(...moodData.map(d => d.avgMood));
-  const range = maxMood - minMood || 1;
+  const range = Math.max(maxMood - minMood, 0.1); // Ensure minimum range to prevent division by zero
 
   const getTrendIcon = () => {
     switch (trend) {

@@ -109,10 +109,37 @@ export default function AuthModal({ open, onOpenChange, onSuccess }: AuthModalPr
       return;
     }
 
-    if (registerData.password.length < 6) {
+    // Enhanced password validation
+    if (registerData.password.length < 8) {
       toast({
         title: "Password Too Short",
-        description: "Password must be at least 6 characters long.",
+        description: "Password must be at least 8 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check for password complexity
+    const hasUpperCase = /[A-Z]/.test(registerData.password);
+    const hasLowerCase = /[a-z]/.test(registerData.password);
+    const hasNumbers = /\d/.test(registerData.password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(registerData.password);
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+      toast({
+        title: "Password Too Weak",
+        description: "Password must contain uppercase, lowercase, and numeric characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check for common weak passwords
+    const commonPasswords = ['password', '12345678', 'qwerty123', 'abc12345', 'password123'];
+    if (commonPasswords.some(common => registerData.password.toLowerCase().includes(common))) {
+      toast({
+        title: "Password Too Common",
+        description: "Please choose a more secure password.",
         variant: "destructive",
       });
       return;

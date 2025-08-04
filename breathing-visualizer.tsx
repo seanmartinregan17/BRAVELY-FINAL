@@ -146,7 +146,7 @@ export default function BreathingVisualizer({ open, onOpenChange }: BreathingVis
 
     const interval = setInterval(checkCycleCompletion, 100);
     return () => clearInterval(interval);
-  }, [isActive, open, startTime, cycle, totalCycles]);
+  }, [isActive, open, startTime, cycle, totalCycles, breathingPattern.inhale, breathingPattern.hold, breathingPattern.exhale, breathingPattern.pause]);
 
   const getPhaseText = () => {
     switch (phase) {
