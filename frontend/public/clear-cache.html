@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clear Cache - Bravely</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+    .container {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    h1 {
+      color: #4F9A94;
+      margin-bottom: 20px;
+    }
+    .instructions {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    .step {
+      margin: 15px 0;
+      padding: 10px;
+      background: #e8f5e8;
+      border-radius: 5px;
+    }
+    button {
+      background: #4F9A94;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover {
+      background: #3d7a75;
+    }
+    .success {
+      color: #4F9A94;
+      font-weight: bold;
+    }
+    .warning {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔄 Clear App Cache</h1>
+    
+    <p>If you're seeing an old version of the Bravely app, try these steps:</p>
+    
+    <div class="instructions">
+      <h3>Method 1: Automatic Cache Clear</h3>
+      <button onclick="clearCache()">Clear Cache & Reload</button>
+      <p id="status"></p>
+    </div>
+    
+    <div class="instructions">
+      <h3>Method 2: Manual Steps</h3>
+      <div class="step">
+        <strong>Step 1:</strong> Close the Bravely app completely
+      </div>
+      <div class="step">
+        <strong>Step 2:</strong> Open Safari and go to Settings → Privacy & Security → Website Data
+      </div>
+      <div class="step">
+        <strong>Step 3:</strong> Search for "replit.app" and delete all data
+      </div>
+      <div class="step">
+        <strong>Step 4:</strong> Restart Safari and visit the app again
+      </div>
+    </div>
+    
+    <div class="instructions">
+      <h3>Method 3: Hard Refresh</h3>
+      <div class="step">
+        <strong>iOS Safari:</strong> Hold the refresh button and select "Request Desktop Site"
+      </div>
+      <div class="step">
+        <strong>Android Chrome:</strong> Pull down to refresh or tap the menu → Settings → Site Settings → Storage → Clear
+      </div>
+    </div>
+    
+    <p><a href="/">← Back to Bravely</a></p>
+  </div>
+
+  <script>
+    async function clearCache() {
+      const status = document.getElementById('status');
+      
+      try {
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let registration of registrations) {
+            await registration.unregister();
+          }
+          status.innerHTML = '<span class="success">✓ Service worker cleared</span>';
+        }
+        
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+          status.innerHTML += '<br><span class="success">✓ Cache storage cleared</span>';
+        }
+        
+        // Clear local storage
+        localStorage.clear();
+        sessionStorage.clear();
+        status.innerHTML += '<br><span class="success">✓ Local storage cleared</span>';
+        
+        status.innerHTML += '<br><span class="success">✓ Reloading app...</span>';
+        
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+        
+      } catch (error) {
+        status.innerHTML = '<span class="warning">⚠️ Error clearing cache. Please try manual method.</span>';
+        console.error('Cache clear error:', error);
+      }
+    }
+  </script>
+</body>
+</html>
