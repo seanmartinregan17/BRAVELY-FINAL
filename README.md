@@ -67,23 +67,21 @@ npm run build
 
 ## Deployment
 
-### Frontend (Vercel)
+> 📖 **For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)**  
+> 📋 **For a quick checklist, see [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)**
 
-The client is configured for deployment on Vercel:
+### Quick Overview
 
-1. Connect your repository to Vercel
-2. Set the build settings:
-   - Build Command: `cd client && npm run build`
-   - Output Directory: `client/dist`
-   - Install Command: `npm run install:all`
+**Frontend (Vercel):**
+- Framework: Vite
+- Root Directory: `client`
+- Build Command: `npm run build`
+- Output Directory: `dist`
 
-### Backend (Railway)
-
-The server is configured for deployment on Railway:
-
-1. Connect your repository to Railway
-2. Set the root directory to `server`
-3. Railway will automatically detect the Node.js project
+**Backend (Railway):**
+- Root Directory: `server`
+- Auto-detected Node.js project
+- Environment variables required
 
 ### Environment Variables
 
