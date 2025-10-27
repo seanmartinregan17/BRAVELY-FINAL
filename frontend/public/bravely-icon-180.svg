@@ -1,0 +1,36 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="appBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#67C3CC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F9A94;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sunGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB84D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFCC80;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="hillsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#81C784;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#66BB6A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8E1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F5F5DC;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- App icon background with rounded corners -->
+  <rect width="180" height="180" rx="32" ry="32" fill="url(#appBg)"/>
+  
+  <!-- Sun -->
+  <circle cx="90" cy="63" r="22" fill="url(#sunGradient)"/>
+  
+  <!-- Hills -->
+  <ellipse cx="90" cy="135" rx="63" ry="27" fill="url(#hillsGradient)"/>
+  
+  <!-- Winding path -->
+  <path d="M 54 144 Q 72 126 90 129 Q 108 132 126 117" 
+        fill="none" 
+        stroke="url(#pathGradient)" 
+        stroke-width="4" 
+        stroke-linecap="round"/>
+</svg>
