@@ -27,9 +27,16 @@ interface GoalRecommendation {
   riskAssessment: 'safe' | 'moderate' | 'challenging';
 }
 
+interface CustomSettings {
+  goalGrowthRate: number;
+  goalGrowthPeriod: string;
+  currentDistanceGoal: number;
+  currentDurationGoal: number;
+}
+
 export default function ProgressiveGoals({ user }: ProgressiveGoalsProps) {
   const [showRecommendation, setShowRecommendation] = useState(false);
-  const [customSettings, setCustomSettings] = useState({
+  const [customSettings, setCustomSettings] = useState<CustomSettings>({
     goalGrowthRate: 5.0,
     goalGrowthPeriod: 'weekly',
     currentDistanceGoal: 0.1,
@@ -82,7 +89,7 @@ export default function ProgressiveGoals({ user }: ProgressiveGoalsProps) {
 
   // Update settings
   const updateSettingsMutation = useMutation({
-    mutationFn: (settings: any) => 
+    mutationFn: (settings: CustomSettings & { destinationGoals: string[] }) => 
       apiRequest('PATCH', `/api/progressive-goals/${user.id}/settings`, settings),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/progressive-goals', user.id] });
@@ -184,10 +191,18 @@ export default function ProgressiveGoals({ user }: ProgressiveGoalsProps) {
                   type="number"
                   step="0.01"
                   min="0"
-                  value={customSettings.currentDistanceGoal ?? (progressData?.currentGoals?.distanceGoal || 0.1)}
+                  value={customSettings.currentDistanceGoal}
                   onChange={(e) => {
                     const value = e.target.value;
-                    setCustomSettings(prev => ({ ...prev, currentDistanceGoal: value as any }));
+                    // Allow empty string during typing
+                    if (value === '') {
+                      setCustomSettings(prev => ({ ...prev, currentDistanceGoal: 0 }));
+                    } else {
+                      const numValue = parseFloat(value);
+                      if (!isNaN(numValue)) {
+                        setCustomSettings(prev => ({ ...prev, currentDistanceGoal: numValue }));
+                      }
+                    }
                   }}
                   onBlur={(e) => {
                     const value = parseFloat(e.target.value);
@@ -205,13 +220,22 @@ export default function ProgressiveGoals({ user }: ProgressiveGoalsProps) {
                 <Input
                   type="number"
                   step="1"
-                  value={customSettings.currentDurationGoal ?? (progressData?.currentGoals?.durationGoal || 1)}
+                  min="1"
+                  value={customSettings.currentDurationGoal}
                   onChange={(e) => {
                     const value = e.target.value;
-                    setCustomSettings(prev => ({ ...prev, currentDurationGoal: value as any }));
+                    // Allow empty string during typing
+                    if (value === '') {
+                      setCustomSettings(prev => ({ ...prev, currentDurationGoal: 0 }));
+                    } else {
+                      const numValue = parseInt(value, 10);
+                      if (!isNaN(numValue)) {
+                        setCustomSettings(prev => ({ ...prev, currentDurationGoal: numValue }));
+                      }
+                    }
                   }}
                   onBlur={(e) => {
-                    const value = parseInt(e.target.value);
+                    const value = parseInt(e.target.value, 10);
                     if (isNaN(value) || value <= 0) {
                       setCustomSettings(prev => ({ ...prev, currentDurationGoal: 1 }));
                     } else {
